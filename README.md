@@ -1,6 +1,6 @@
-# greatPlace
+# GreatPlace
 
-A new Flutter project.
+A new Flutter project to explore Flutter Native Device Features.
 
 ## Getting Started
 
