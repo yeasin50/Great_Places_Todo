@@ -22,12 +22,22 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	
+
+	<!-- TODO: Added dependencies -->
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>we need to choose picture</string>
 	<key>NSCameraUsageDescription</key>
 	<string>we need to take picture</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Need to get Your Location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Need to get Your Location</string>
 
+    <!-- FIXME:: Not sure -->
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+
+	
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
