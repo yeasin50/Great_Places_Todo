@@ -7,6 +7,9 @@ class DBHelper {
   static const String KEY_ID = 'id';
   static const String KEY_TITLE = 'title';
   static const String KEY_IMAGE = 'image';
+  static const String KEY_LAT = 'latitude';
+  static const String KEY_LNG = 'lngitude';
+  static const String KEY_address = 'address';
 
   static Future<Database> database() async {
     final dbPath = await sql.getDatabasesPath();
@@ -15,7 +18,7 @@ class DBHelper {
       path.join(dbPath, 'places.db'),
       onCreate: (db, version) {
         return db.execute(
-            'CREATE TABLE $TABLE_NAME( $KEY_ID TEXT PRIMARY KEY, $KEY_TITLE TEXT, $KEY_IMAGE TEXT)');
+            'CREATE TABLE $TABLE_NAME( $KEY_ID TEXT PRIMARY KEY, $KEY_TITLE TEXT, $KEY_IMAGE TEXT, $KEY_LAT REAL, $KEY_LNG REAL,$KEY_address TEXT )');
       },
       version: 1,
     );

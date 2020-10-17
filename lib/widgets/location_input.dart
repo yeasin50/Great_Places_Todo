@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:greatPlace/screens/map_screen.dart';
 import 'package:location/location.dart';
 import '../helpers/location_helper.dart';
 
 class LocationInput extends StatefulWidget {
-  LocationInput({Key key}) : super(key: key);
+  final Function onSelectPlace;
+
+  LocationInput(this.onSelectPlace);
 
   @override
   _LocationInputState createState() => _LocationInputState();
@@ -12,22 +16,45 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   String _previewImageUrl;
 
-  Future<void> _getCurrentLocation() async {
-    final location = await Location().getLocation();
-    print(location.latitude);
-    print(location.longitude);
+  void _showPreview(double lat, double lng) {
     final staticMapUrl = LocationHelper.generateLocationPreviewImage(
-      latitude: location.latitude,
-      longitude: location.longitude,
+      latitude: lat,
+      longitude: lng,
     );
     setState(() {
       _previewImageUrl = staticMapUrl;
     });
   }
 
+  Future<void> _getCurrentLocation() async {
+    try {
+      final location = await Location().getLocation();
+      _showPreview(location.latitude, location.longitude);
+      widget.onSelectPlace(location.latitude, location.longitude);
+    } catch (e) {
+      //TODO:: add alert dialog
+      return;
+    }
+  }
+
+  Future<void> _selectOnMap() async {
+    final LatLng selectedLocation =
+        await Navigator.of(context).push<LatLng>(MaterialPageRoute(
+      fullscreenDialog: true,
+      builder: (context) => MapScreen(
+        isSelecting: true,
+      ),
+    ));
+    if (selectedLocation == null) {
+      return;
+    }
+    _showPreview(selectedLocation.latitude, selectedLocation.longitude);
+    widget.onSelectPlace(selectedLocation.latitude, selectedLocation.longitude);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    // final width = MediaQuery.of(context).size.width;
     return Column(
       children: <Widget>[
         Container(
@@ -63,7 +90,7 @@ class _LocationInputState extends State<LocationInput> {
               width: 10,
             ),
             FlatButton.icon(
-              onPressed: () {},
+              onPressed: _selectOnMap,
               icon: Icon(Icons.map),
               label: Text(" Select On Map"),
               textColor: Theme.of(context).primaryColor,
